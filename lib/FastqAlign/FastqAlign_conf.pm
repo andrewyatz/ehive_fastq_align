@@ -44,7 +44,7 @@ sub default_options {
     bwa_threads => 1,
     
     # lsf default
-    lsf_queue => 'normal',
+    lsf_queue => 'production-rh6',
   };
 }
 
@@ -124,8 +124,8 @@ sub resource_classes {
   my ($self) = @_;
   return {
     %{$self->SUPER::resource_classes()},
-    'default' => { LSF => '-R"select[mem>100] rusage[mem=100]" -q '.$self->o('lsf_queue') },
-    'bwa' => { LSF => '-R"select[mem>1000] rusage[mem=1000]"-q '.$self->o('lsf_queue') }
+    'default' => { LSF => '-R"select[mem>100] rusage[mem=100] select[gpfs]" -q '.$self->o('lsf_queue') },
+    'bwa' => { LSF => '-R"select[mem>1000] rusage[mem=1000] select[gpfs]" -q '.$self->o('lsf_queue') }
   };
 }
 

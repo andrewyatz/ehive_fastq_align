@@ -38,7 +38,9 @@ sub default_options {
     bwa => 'bwa', #bwa binary location
     
     # Number of records to split fastq files into
-    max_records => 2500,
+    max_records => 50000,
+    # extension to look for & use in the pipeline
+    fastq_extension => 'fq',
     
     # bwa defaults
     bwa_threads => 1,
@@ -63,7 +65,7 @@ sub pipeline_analyses {
       -logic_name => 'fastq_factory',
       -module => 'Bio::EnsEMBL::Hive::RunnableDB::JobFactory',
       -parameters => {
-        inputcmd => q{find #directory# -type f -name '*.fq.gz'},
+        inputcmd => sprintf(q{find #directory# -type f -name '*.%s.gz'}, $self->o('fastq_extension')),
         column_names => [qw/fastq/],
       },
       -flow_into => { 2 => { split_factory => { fastq_in => '#fastq#', index => '#index#' } } }
